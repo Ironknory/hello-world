@@ -12,7 +12,7 @@ def loadImages(filename) :
 	ans = numpy.reshape(ans, [num, row * col])
 	return num, row * col, ans
 
-def loadLables(finlename) :
+def loadLables(filename) :
 	with open(filename, 'rb') as lableFile :
 		buf = lableFile.read()
 		readPlc = struct.calcsize('>II')
