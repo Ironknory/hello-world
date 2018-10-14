@@ -41,6 +41,7 @@ def main() :
 		for j in range(trainImage.num // 10) :
 			train = trainImage.data[j]
 			tmp = calcDist(test, train)
+#			print("fuck")
 			dist.append([tmp, trainLable.data[j]])
 #			print("successfully compared with %s" %j)
 		dist.sort(key = lambda x : x[0])
@@ -59,3 +60,4 @@ def main() :
 	print(float(cntSucceed / testImage.num))
 
 main()
+
