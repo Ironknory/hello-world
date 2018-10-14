@@ -33,16 +33,18 @@ def calcMinplc(dist) :
 	return minplc
 
 def main() :
+	cntFail = 0
 	cntSucceed = 0
 	for i in range(testImage.num) :
 		dist = []
 		test = testImage.data[i]
-		for j in range(trainImage.num) :
+		for j in range(trainImage.num // 10) :
 			train = trainImage.data[j]
 			tmp = calcDist(test, train)
 			dist.append([tmp, trainLable.data[j]])
-			print("successfully compared with %s" %j)
+#			print("successfully compared with %s" %j)
 		dist.sort(key = lambda x : x[0])
+#		print(dist)
 		cnt = [0] * 15
 		maxplc = 1
 		for j in range(K) :
@@ -51,7 +53,9 @@ def main() :
 				maxplc = dist[j][1]
 		if (maxplc == testLable.data[i]) :
 			cntSucceed += 1
-		print(cntSucceed)
+		else :
+			cntFail += 1
+		print("Succeed %d," %cntSucceed, "Fail %d" %cntFail)
 	print(float(cntSucceed / testImage.num))
 
 main()
