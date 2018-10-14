@@ -18,10 +18,9 @@ def loadLables(filename) :
 		readPlc = struct.calcsize('>II')
 		fileSize = struct.unpack_from('>II', buf, 0)
 		num = fileSize[1]
-		ans = struct.unpack_from('>' + str(cnt) + 'B', buf, readPlc)
+		ans = struct.unpack_from('>' + str(num) + 'B', buf, readPlc)
 	ans = numpy.reshape(ans, [num])
 	return num, ans
 
 #print(loadImages('train-images.idx3-ubyte'))
 #print(loadLables('train-labels.idx1-ubyte'))
-
