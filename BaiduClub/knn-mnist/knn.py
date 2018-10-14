@@ -14,15 +14,15 @@ class Lable(object) :
 		self.data = data
 
 K = 20
-trainImage = Image(readFile.loadImages('train-images.idx3-ubyte'))
-trainLable = Lable(readFile.loadLables('train-labels.idx1-ubyte'))
-testImage = Image(readFile.loadTmages('t10k-images.idx3-ubyte'))
-testLable = Lable(readFile.loadLables('t10k-labels.idx1-ubyte'))
+trainImage = Image(*readFile.loadImages('train-images.idx3-ubyte'))
+trainLable = Lable(*readFile.loadLables('train-labels.idx1-ubyte'))
+testImage = Image(*readFile.loadImages('t10k-images.idx3-ubyte'))
+testLable = Lable(*readFile.loadLables('t10k-labels.idx1-ubyte'))
 
 def calcDist(test, train) :
 	ans = 0
 	for i in range(trainImage.length) :
-		ans += abs(test[i] - train[i])
+		ans += abs((test[i] != 0) ^ (train[i] != 0))
 	return ans
 
 def calcMinplc(dist) :
@@ -33,26 +33,25 @@ def calcMinplc(dist) :
 	return minplc
 
 def main() :
+	cntSucceed = 0
 	for i in range(testImage.num) :
 		dist = []
 		test = testImage.data[i]
 		for j in range(trainImage.num) :
 			train = trainImage.data[j]
 			tmp = calcDist(test, train)
-			if (len(dist) < K) :
-				dist.append(list(tmp, trainLable.data[j]))
-			else :
-				minplc = calcMinplc(dist)
-				if (tmp < dist[minplc][0]) :
-					dist[minplc] = list(tmp, trainLable.data[j])
-		cnt = [0] * K
+			dist.append([tmp, trainLable.data[j]])
+			print("successfully compared with %s" %j)
+		dist.sort(key = lambda x : x[0])
+		cnt = [0] * 15
 		maxplc = 1
-		for j in dist :
-			cnt[j[1]] += 1
-			if (cnt[j[1]] > cnt[maxplc]) :
-				maxplc = j[1]
+		for j in range(K) :
+			cnt[dist[j][1]] += 1
+			if (cnt[dist[j][1]] > cnt[maxplc]) :
+				maxplc = dist[j][1]
 		if (maxplc == testLable.data[i]) :
 			cntSucceed += 1
+		print(cntSucceed)
 	print(float(cntSucceed / testImage.num))
 
 main()
